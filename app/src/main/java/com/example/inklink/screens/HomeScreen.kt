@@ -44,7 +44,13 @@ fun HomeScreen(navController: NavHostController, viewModel: MainViewModel) {
                             contentDescription = "Perfil",
                             modifier = Modifier
                                 .size(32.dp)
-                                .clickable { /* ir a perfil */ }
+                                .clickable {
+                                    if (viewModel.isLoggedIn) {
+                                        navController.navigate("user")
+                                    } else {
+                                        navController.navigate("register")
+                                    }
+                                }
                         )
                     }
                 },

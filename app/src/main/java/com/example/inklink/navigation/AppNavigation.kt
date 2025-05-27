@@ -10,6 +10,9 @@ import androidx.navigation.compose.composable
 import com.example.inklink.screens.HomeScreen
 import com.example.inklink.viewmodel.MainViewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.inklink.screens.LoginScreen
+import com.example.inklink.screens.RegisterScreen
+import com.example.inklink.screens.UserScreen
 
 
 @SuppressLint("SuspiciousIndentation")
@@ -26,12 +29,23 @@ fun AppNavigation(viewModel: MainViewModel) {
             composable(AppScreens.HomeScreen.route) {
                 HomeScreen(navController, viewModel)
             }
+            composable(AppScreens.UserScreen.route) {
+                UserScreen(navController, viewModel)
+            }
+            // En AppNavigation:
+            composable(AppScreens.RegisterScreen.route) {
+                RegisterScreen(navController) // Solo pasamos navController, no viewModel
+            }
+            composable(AppScreens.LoginScreen.route) {
+                LoginScreen(navController, viewModel)
+            }
         }
     }
 
 sealed class AppScreens(val route: String) {
-    object HomeScreen : AppScreens(route = "HomeScreen")
-    object UserScreen : AppScreens(route = "UserScreen")
-
+    object HomeScreen : AppScreens(route = "home")
+    object UserScreen : AppScreens(route = "user")
+    object RegisterScreen : AppScreens(route = "register")
+    object LoginScreen : AppScreens(route = "login")
 }
 

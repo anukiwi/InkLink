@@ -1,14 +1,23 @@
 package com.example.inklink.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.inklink.data.model.Usuario
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import com.example.inklink.data.helper.SessionManager
 
-class MainViewModel : ViewModel() {
 
-    private val _usuario: MutableLiveData<Usuario?> = MutableLiveData()
-    val usuario: LiveData<Usuario?> = _usuario
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+    private val sessionManager = SessionManager(application.applicationContext)
 
-    // Si necesitas usar DataViewModel, hazlo en el MainActivity, no aquí.
+    var isLoggedIn: Boolean = sessionManager.isLoggedIn()
+        private set
+
+    fun login() {
+        sessionManager.saveLoginState(true)
+        isLoggedIn = true
+    }
+
+    fun logout() {
+        sessionManager.clearSession()
+        isLoggedIn = false
+    }
 }
