@@ -7,6 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 interface SupabaseApi {
     @Headers(
@@ -26,9 +27,10 @@ interface SupabaseApi {
     )
     @GET("rest/v1/usuario")
     fun getUsuarioPorCredenciales(
-        @Query("username") username: String,
-        @Query("password") password: String,
-        @Query("select") select: String = "*"
+        @Query("select") select: String = "*",
+        @QueryMap filters: Map<String, String>
     ): Call<List<Usuario>>
+
+
 
 }
