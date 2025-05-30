@@ -2,11 +2,13 @@ package com.example.inklink.viewmodel
 
 import android.app.Application
 import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.AndroidViewModel
 import com.example.inklink.data.api.RetrofitClient
 import com.example.inklink.data.api.SupabaseApi
 import com.example.inklink.data.helper.SessionManager
 import com.example.inklink.data.model.Historia
+import com.example.inklink.data.model.HistoriaWithUser
 import com.example.inklink.data.model.Usuario
 import retrofit2.Call
 import retrofit2.Callback
@@ -15,6 +17,8 @@ import retrofit2.Response
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val sessionManager = SessionManager(application.applicationContext)
     private val api: SupabaseApi = RetrofitClient.instance
+    private var historias = mutableStateListOf<HistoriaWithUser>()
+
 
 
     var isLoggedIn: Boolean = sessionManager.isLoggedIn()
@@ -76,6 +80,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 callback(false)
+            }
+        })
+    }
+
+    fun obtenerHistorias() {
+        api.obtenerHistoriasConUsuario().enqueue(object : Callback<List<HistoriaWithUser>> {
+            override fun onResponse(
+                call: Call<List<HistoriaWithUser>>,
+                response: Response<List<HistoriaWithUser>>
+            ) {
+                response.body()?.let { lista ->
+                    historias.clear()
+                    historias.addAll(lista)
+                }
+            }
+            override fun onFailure(call: Call<List<HistoriaWithUser>>, t: Throwable) {
+                Log.e("API", "Error al obtener historias: ${t.localizedMessage}")
             }
         })
     }
