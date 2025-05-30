@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -101,36 +102,71 @@ fun UserScreen(navController: NavHostController, viewModel: MainViewModel) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 if (isEditingDescripcion.value) {
-                    OutlinedTextField(
-                        value = descripcion,
-                        onValueChange = { descripcion = it },
-                        label = { Text("Añadir descripción") },
-                        singleLine = false,
-                        maxLines = 3,
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(
-                        onClick = {
-                            viewModel.actualizarDescripcion(descripcion)
-                            isEditingDescripcion.value = false
-                        }
+                            .background(Color(0xFF65626B)), // Mismo fondo que pantalla
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Guardar")
+                        OutlinedTextField(
+                            value = descripcion,
+                            onValueChange = { descripcion = it },
+                            label = { Text("Añadir descripción", color = Color.White) },
+                            singleLine = false,
+                            maxLines = 3,
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedTextColor = Color.White,
+                                unfocusedTextColor = Color.White,
+                                focusedLabelColor = Color.White,
+                                unfocusedLabelColor = Color.White,
+                                containerColor = Color(0xFF65626B),
+                                focusedBorderColor = Color.White,
+                                unfocusedBorderColor = Color.White.copy(alpha = 0.5f)
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Button(
+                            onClick = {
+                                viewModel.actualizarDescripcion(descripcion)
+                                isEditingDescripcion.value = false
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.White,
+                                contentColor = Color.Black
+                            )
+                        ) {
+                            Text("Guardar")
+                        }
                     }
                 } else {
-                    Text(
-                        descripcion,
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        Text(
+                            text = descripcion,
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        TextButton(
+                            onClick = { isEditingDescripcion.value = true }
+                        ) {
+                            Text("Editar descripción", color = Color.White)
+                        }
+                    }
                 }
-            }
+                }
 
-            // Fondo claro para las secciones inferiores
+                // Fondo claro para las secciones inferiores
             Column(
                 modifier = Modifier
                     .fillMaxSize()

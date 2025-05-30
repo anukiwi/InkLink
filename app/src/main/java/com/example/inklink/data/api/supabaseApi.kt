@@ -31,6 +31,17 @@ interface SupabaseApi {
         @QueryMap filters: Map<String, String>
     ): Call<List<Usuario>>
 
+    @Headers(
+        "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54aGZtYWZ5cGNzZWp3Z2Fland3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNzg5NzAsImV4cCI6MjA2MjY1NDk3MH0.C_IAkLvIb9a3NGEUbF9PQK_x4S0WLfmA6x-wotAnzlU",
+        "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54aGZtYWZ5cGNzZWp3Z2Fland3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNzg5NzAsImV4cCI6MjA2MjY1NDk3MH0.C_IAkLvIb9a3NGEUbF9PQK_x4S0WLfmA6x-wotAnzlU",
+        "Accept: application/json",
+        "Content-Type: application/json"
+    )
+    @retrofit2.http.PATCH("rest/v1/usuario")
+    fun actualizarDescripcionUsuario(
+        @Query("id") id: String,
+        @Body body: Map<String, String>
+    ): Call<Void>
 
 
 }
