@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.example.inklink.screens.HomeScreen
 import com.example.inklink.viewmodel.MainViewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.inklink.screens.EscribirScreen
 import com.example.inklink.screens.LoginScreen
 import com.example.inklink.screens.RegisterScreen
 import com.example.inklink.screens.UserScreen
@@ -32,12 +33,14 @@ fun AppNavigation(viewModel: MainViewModel) {
             composable(AppScreens.UserScreen.route) {
                 UserScreen(navController, viewModel)
             }
-            // En AppNavigation:
             composable(AppScreens.RegisterScreen.route) {
                 RegisterScreen(navController) // Solo pasamos navController, no viewModel
             }
             composable(AppScreens.LoginScreen.route) {
                 LoginScreen(navController, viewModel)
+            }
+            composable(AppScreens.EscribirScreen.route) {
+                EscribirScreen(navController, viewModel)
             }
         }
     }
@@ -47,5 +50,7 @@ sealed class AppScreens(val route: String) {
     object UserScreen : AppScreens(route = "user")
     object RegisterScreen : AppScreens(route = "register")
     object LoginScreen : AppScreens(route = "login")
+    object EscribirScreen : AppScreens("escribir")
+
 }
 

@@ -13,7 +13,7 @@ data class Usuario(
 ) : Serializable
 
 data class Historia(
-    var id: String, //UUID
+    var id: String? = null, //UUID
     var titulo: String,
     var sinopsis: String,
     var likes: Int = 0,
@@ -33,12 +33,4 @@ data class Guardar(
     var historia_id: String
 ) : Serializable
 
-data class Result(
-    val usuarios: List<Usuario>? = null,
-    val historias: List<Historia>? = null,
-    val capitulos: List<Capitulo>? = null,
-    val guardados: List<Guardar>? = null,
-    val usuario: Usuario? = null,
-    val historia: Historia? = null,
-    val capitulo: Capitulo? = null
-)
+

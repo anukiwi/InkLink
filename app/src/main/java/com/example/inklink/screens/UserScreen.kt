@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
@@ -57,6 +58,19 @@ fun UserScreen(navController: NavHostController, viewModel: MainViewModel) {
                     titleContentColor = Color.White
                 )
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate("escribir") },
+                containerColor = Color(0xFF65626B),
+                contentColor = Color.White  // Aquí defines el color del icono
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Escribir Historia"
+                    // No necesitas tint aquí
+                )
+            }
         },
         containerColor = Color(0xFF65626B)
     ) { padding ->

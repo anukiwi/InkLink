@@ -23,6 +23,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(navController: NavHostController) {
     val context = LocalContext.current
@@ -50,7 +51,12 @@ fun RegisterScreen(navController: NavHostController) {
             value = nombre,
             onValueChange = { nombre = it },
             label = { Text("Nombre") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF65626B),
+                focusedLabelColor = Color(0xFF65626B)
+            )
+
         )
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -58,7 +64,11 @@ fun RegisterScreen(navController: NavHostController) {
             value = apellidos,
             onValueChange = { apellidos = it },
             label = { Text("Apellidos") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF65626B),
+                focusedLabelColor = Color(0xFF65626B)
+            )
         )
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -66,7 +76,11 @@ fun RegisterScreen(navController: NavHostController) {
             value = username,
             onValueChange = { username = it },
             label = { Text("Nombre de usuario") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF65626B),
+                focusedLabelColor = Color(0xFF65626B)
+            )
         )
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -75,12 +89,20 @@ fun RegisterScreen(navController: NavHostController) {
             onValueChange = { password = it },
             label = { Text("Contraseña") },
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF65626B),
+                focusedLabelColor = Color(0xFF65626B)
+            )
         )
 
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
+                if (nombre.isBlank() || apellidos.isBlank() || username.isBlank() || password.isBlank()) {
+                    Toast.makeText(context, "Por favor rellena todos los campos", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
                 val nuevoUsuario = Usuario(
                     id = UUID.randomUUID().toString(),
                     nombre = nombre,

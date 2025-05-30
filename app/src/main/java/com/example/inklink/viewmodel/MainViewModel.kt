@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.example.inklink.data.api.RetrofitClient
 import com.example.inklink.data.api.SupabaseApi
 import com.example.inklink.data.helper.SessionManager
+import com.example.inklink.data.model.Historia
 import com.example.inklink.data.model.Usuario
 import retrofit2.Call
 import retrofit2.Callback
@@ -65,5 +66,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
             })
         }
+    }
+    fun publicarHistoria(historia: Historia, callback: (Boolean) -> Unit) {
+        val call = api.publicarHistoria(historia)
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                callback(response.isSuccessful)
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                callback(false)
+            }
+        })
     }
 }

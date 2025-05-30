@@ -41,6 +41,7 @@ fun HomeScreen(navController: NavHostController, viewModel: MainViewModel) {
                                 color = Color.White
                             )
                         }
+
                         Icon(
                             imageVector = Icons.Default.Person,
                             contentDescription = "Perfil",
@@ -61,7 +62,23 @@ fun HomeScreen(navController: NavHostController, viewModel: MainViewModel) {
                     titleContentColor = Color.White
                 )
             )
+
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate("escribir") },
+                containerColor = Color(0xFF65626B),
+                contentColor = Color.White  // Aquí defines el color del icono
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Escribir Historia"
+                    // No necesitas tint aquí
+                )
+            }
         }
+
+
     ) { padding ->
         Column(
             modifier = Modifier

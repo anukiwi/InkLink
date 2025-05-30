@@ -11,9 +11,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +38,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: MainViewModel) {
     val context = LocalContext.current
@@ -60,7 +62,11 @@ fun LoginScreen(navController: NavHostController, viewModel: MainViewModel) {
             value = username,
             onValueChange = { username = it },
             label = { Text("Nombre de usuario") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF65626B),
+                focusedLabelColor = Color(0xFF65626B)
+            )
         )
         Spacer(modifier = Modifier.height(12.dp))
         OutlinedTextField(
@@ -68,12 +74,20 @@ fun LoginScreen(navController: NavHostController, viewModel: MainViewModel) {
             onValueChange = { password = it },
             label = { Text("Contraseña") },
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF65626B),
+                focusedLabelColor = Color(0xFF65626B)
+            )
         )
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
             onClick = {
+                if (username.isBlank() || password.isBlank()) {
+                    Toast.makeText(context, "Por favor rellena todos los campos", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
                 val filters = mapOf(
                     "username" to "eq.$username",
                     "password" to "eq.$password"
