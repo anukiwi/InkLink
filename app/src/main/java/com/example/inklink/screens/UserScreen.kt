@@ -9,6 +9,10 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,7 +65,10 @@ fun UserScreen(navController: NavHostController, viewModel: MainViewModel) {
                 .fillMaxSize()
                 .background(Color(0xFF65626B))
         ) {
-            // Header de perfil
+            val user = viewModel.getCurrentUser()
+            var descripcion by remember { mutableStateOf(user?.descripcion ?: "") }
+            val isEditingDescripcion = remember { mutableStateOf(user?.descripcion.isNullOrEmpty()) }
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -79,38 +86,47 @@ fun UserScreen(navController: NavHostController, viewModel: MainViewModel) {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    "Paco Pulido",
+                    "${user?.nombre ?: ""} ${user?.apellidos ?: ""}",
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    "@pacopul",
+                    "@${user?.username ?: ""}",
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Divider(
-                    color = Color.White.copy(alpha = 0.5f),
-                    thickness = 1.dp
-                )
+                Divider(color = Color.White.copy(alpha = 0.5f), thickness = 1.dp)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    "Soy profesor en el Instituto IES Azarquiel desde hace años y me apasionan las bicis! Os quiero MLs.",
-                    color = Color.White,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 32.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    ProfileStat("24", "Publicaciones")
-                    ProfileStat("38", "Guardados")
-                    ProfileStat("341", "Likes")
+
+                if (isEditingDescripcion.value) {
+                    OutlinedTextField(
+                        value = descripcion,
+                        onValueChange = { descripcion = it },
+                        label = { Text("Añadir descripción") },
+                        singleLine = false,
+                        maxLines = 3,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                        onClick = {
+                            viewModel.actualizarDescripcion(descripcion)
+                            isEditingDescripcion.value = false
+                        }
+                    ) {
+                        Text("Guardar")
+                    }
+                } else {
+                    Text(
+                        descripcion,
+                        color = Color.White,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                    )
                 }
             }
 

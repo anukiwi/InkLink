@@ -5,13 +5,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.inklink.R
 import com.example.inklink.data.api.RetrofitClient
 import com.example.inklink.data.model.Usuario
 import retrofit2.Call
@@ -35,10 +39,10 @@ fun RegisterScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            "Registrarse",
+            "Registro",
             fontWeight = FontWeight.Bold,
             fontSize = 28.sp,
-            color = MaterialTheme.colorScheme.primary
+            color = Color(0xFF65626B),
         )
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -61,7 +65,7 @@ fun RegisterScreen(navController: NavHostController) {
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("Usuario") },
+            label = { Text("Nombre de usuario") },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(12.dp))
@@ -89,7 +93,8 @@ fun RegisterScreen(navController: NavHostController) {
                     .enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.isSuccessful) {
-                                Toast.makeText(context, "Registro exitoso", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "Registro exitoso", Toast.LENGTH_LONG)
+                                    .show()
                                 navController.navigate("login") {
                                     popUpTo("register") { inclusive = true }
                                 }
@@ -106,28 +111,36 @@ fun RegisterScreen(navController: NavHostController) {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(50.dp)
+                .height(50.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF65626B),
+                contentColor = colorResource(id = R.color.white)
+            )
         ) {
             Text("Registrarse", fontSize = 18.sp)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Texto para iniciar sesión con click
-        Text(
-            text = "¿Ya tienes una cuenta? ",
-            fontSize = 14.sp,
-            modifier = Modifier.padding(top = 8.dp),
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        Text(
-            text = "Inicia sesión",
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            fontSize = 16.sp,
-            modifier = Modifier
-                .padding(top = 4.dp)
-                .clickable { navController.navigate("login") }
-        )
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "¿Ya tienes tienes cuenta?",
+                fontSize = 14.sp,
+                color = colorResource(id = R.color.black)
+            )
+            Text(
+                text = "Inicia sesión",
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF65626B),
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .clickable { navController.navigate("login") }
+            )
+        }
+
     }
 }

@@ -3,13 +3,15 @@ package com.example.inklink.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,7 +34,7 @@ fun HomeScreen(navController: NavHostController, viewModel: MainViewModel) {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column {
-                            Text(text = "Hola, pepito", fontSize = 20.sp)
+                            Text(text = "Hola, ${viewModel.usuarioActual?.nombre ?: "Invitado"}", fontSize = 20.sp)
                             Text(
                                 text = "encuentra historias para leer",
                                 fontSize = 14.sp,
@@ -65,6 +67,7 @@ fun HomeScreen(navController: NavHostController, viewModel: MainViewModel) {
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .background(Color(0xFFEFEFEF))
         ) {
             // Filtros
@@ -106,21 +109,16 @@ fun HomeScreen(navController: NavHostController, viewModel: MainViewModel) {
                 modifier = Modifier.padding(start = 12.dp, top = 8.dp)
             )
 
-            LazyColumn(
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(5) { i ->
-                    RecommendedCard(
-                        autor = "usuario$i",
-                        tiempo = "hace ${i + 1} horas",
-                        titulo = "Historia interesante $i",
-                        descripcion = "Un pequeño resumen de lo que trata esta historia $i...",
-                        likes = 40 + i,
-                        capitulos = 10 + i,
-                        vistas = 1000 * (i + 1)
-                    )
-                }
+            repeat(5) { i ->
+                RecommendedCard(
+                    autor = "usuario$i",
+                    tiempo = "hace ${i + 1} horas",
+                    titulo = "Historia interesante $i",
+                    descripcion = "Un pequeño resumen de lo que trata esta historia $i...",
+                    likes = 40 + i,
+                    capitulos = 10 + i,
+                    vistas = 1000 * (i + 1)
+                )
             }
 
             // Historias Nuevas
@@ -132,13 +130,16 @@ fun HomeScreen(navController: NavHostController, viewModel: MainViewModel) {
                 modifier = Modifier.padding(start = 12.dp, top = 8.dp)
             )
 
-            LazyColumn(
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                items(3) { i ->
-                    NewStoryCard("Nueva historia $i", "autor$i")
-                }
+            repeat(3) { i ->
+                NewStoryCard(
+                    autor = "autor$i",
+                    tiempo = "hace ${i + 1} horas",
+                    titulo = "Nueva historia interesante $i",
+                    descripcion = "Esta historia trata sobre una idea innovadora que se desarrolla en el capítulo $i...",
+                    likes = 12 + i,
+                    capitulos = 5 + i,
+                    vistas = 300 * (i + 1)
+                )
             }
         }
     }
@@ -190,14 +191,32 @@ fun RecommendedCard(
     capitulos: Int,
     vistas: Int
 ) {
+    var liked by remember { mutableStateOf(false) }
+    var bookmarked by remember { mutableStateOf(false) }
+
     Card(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFA69C9A))
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Text(text = titulo, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = titulo, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
+                Icon(
+                    imageVector = if (bookmarked) Icons.Filled.Done else Icons.Outlined.Add,
+                    contentDescription = "Guardar",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clickable { bookmarked = !bookmarked }
+                )
+            }
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = "$autor • $tiempo", fontSize = 12.sp, color = Color.White.copy(alpha = 0.8f))
             Spacer(modifier = Modifier.height(4.dp))
@@ -207,26 +226,69 @@ fun RecommendedCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "❤ $likes", fontSize = 12.sp, color = Color.White)
-                Text(text = "📖 $capitulos", fontSize = 12.sp, color = Color.White)
-                Text(text = "👁 $vistas", fontSize = 12.sp, color = Color.White)
+                Icon(
+                    imageVector = if (liked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    contentDescription = "Like",
+                    tint = Color.White,
+                    modifier = Modifier.clickable { liked = !liked }
+                )
             }
         }
     }
 }
 
 @Composable
-fun NewStoryCard(titulo: String, autor: String) {
+fun NewStoryCard(
+    autor: String,
+    tiempo: String,
+    titulo: String,
+    descripcion: String,
+    likes: Int,
+    capitulos: Int,
+    vistas: Int
+) {
+    var liked by remember { mutableStateOf(false) }
+    var bookmarked by remember { mutableStateOf(false) }
+
     Card(
         shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray)
+            .padding(horizontal = 12.dp, vertical = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFA69C9A))
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Text(text = titulo, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.DarkGray)
-            Text(text = "por $autor", fontSize = 12.sp, color = Color.Gray)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = titulo, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
+                Icon(
+                    imageVector = if (bookmarked) Icons.Filled.Done else Icons.Outlined.Add,
+                    contentDescription = "Guardar",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clickable { bookmarked = !bookmarked }
+                )
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = "$autor • $tiempo", fontSize = 12.sp, color = Color.White.copy(alpha = 0.8f))
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = descripcion, maxLines = 2, fontSize = 14.sp, color = Color.White)
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(
+                    imageVector = if (liked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    contentDescription = "Like",
+                    tint = Color.White,
+                    modifier = Modifier.clickable { liked = !liked }
+                )
+            }
         }
     }
 }
