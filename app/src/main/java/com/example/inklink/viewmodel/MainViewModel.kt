@@ -84,6 +84,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    //está creada pero no la uso todavía en la home
+
     fun obtenerHistorias() {
         api.obtenerHistoriasConUsuario().enqueue(object : Callback<List<HistoriaWithUser>> {
             override fun onResponse(

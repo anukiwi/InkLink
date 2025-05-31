@@ -4,6 +4,7 @@ package com.example.inklink.data.model
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
+//este DTO lo hice en un futuro para mostrar las historias que pertenecen a un usuario en el perfil.
 data class HistoriaWithUser(
     val id: String?,
     val titulo: String,

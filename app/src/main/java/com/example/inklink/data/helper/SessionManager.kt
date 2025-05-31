@@ -4,22 +4,28 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.inklink.data.model.Usuario
 
+
+//Clase para gestionar la sesión del usuario utilizando SharedPreferences
 class SessionManager(context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences("user_session", Context.MODE_PRIVATE)
 
+    //Guarda el estado de inicio de sesión y el usuario actual
     fun saveLoginState(isLoggedIn: Boolean) {
         prefs.edit().putBoolean("is_logged_in", isLoggedIn).apply()
     }
 
+    //C
     fun isLoggedIn(): Boolean {
         return prefs.getBoolean("is_logged_in", false)
     }
 
+    //Limpia las preferencias de inicio de sesión // CERRAR SESIÓN
     fun clearSession() {
         prefs.edit().clear().apply()
     }
 
+    //Guarda un usuario en las preferencias, guarda todos los datos del usuario
     fun saveUser(usuario: Usuario) {
         val editor = prefs.edit()
         editor.putString("user_id", usuario.id)
@@ -32,6 +38,7 @@ class SessionManager(context: Context) {
         editor.apply()
     }
 
+    //Devuelve todos los datos del usuario
     fun getUser(): Usuario? {
         val id = prefs.getString("user_id", null) ?: return null
         val nombre = prefs.getString("user_nombre", "") ?: ""

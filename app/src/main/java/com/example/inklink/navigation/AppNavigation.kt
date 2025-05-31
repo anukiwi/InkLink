@@ -19,6 +19,8 @@ import com.example.inklink.screens.UserScreen
 @SuppressLint("SuspiciousIndentation")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
+
+//Aquí permito cambiar/navegar de pantallas con Compose.
 fun AppNavigation(viewModel: MainViewModel) {
 
     val navController = rememberNavController()

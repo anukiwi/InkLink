@@ -8,10 +8,10 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
-import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
 
+//Define una interfaz de Retrofit para conectarse a Supabase usando mi API REST
 interface SupabaseApi {
     @Headers(
         "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54aGZtYWZ5cGNzZWp3Z2Fland3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNzg5NzAsImV4cCI6MjA2MjY1NDk3MH0.C_IAkLvIb9a3NGEUbF9PQK_x4S0WLfmA6x-wotAnzlU",
@@ -20,6 +20,7 @@ interface SupabaseApi {
         "Content-Type: application/json"
 
     )
+    //Realiza una petición POST a la tabla usuario
     @POST("rest/v1/usuario")
     fun registrarUsuario(@Body usuario: Usuario): Call<Void>
 
@@ -28,6 +29,8 @@ interface SupabaseApi {
         "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54aGZtYWZ5cGNzZWp3Z2Fland3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNzg5NzAsImV4cCI6MjA2MjY1NDk3MH0.C_IAkLvIb9a3NGEUbF9PQK_x4S0WLfmA6x-wotAnzlU",
         "Accept: application/json",
     )
+
+    //obtener usuario por credenciales
     @GET("rest/v1/usuario")
     fun getUsuarioPorCredenciales(
         @Query("select") select: String = "*",
@@ -40,6 +43,8 @@ interface SupabaseApi {
         "Accept: application/json",
         "Content-Type: application/json"
     )
+
+    //Aquí utilizo PATCH para modificar parcialmente un usuario
     @retrofit2.http.PATCH("rest/v1/usuario")
     fun actualizarDescripcionUsuario(
         @Query("id") id: String,
@@ -61,6 +66,8 @@ interface SupabaseApi {
         "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54aGZtYWZ5cGNzZWp3Z2Fland3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNzg5NzAsImV4cCI6MjA2MjY1NDk3MH0.C_IAkLvIb9a3NGEUbF9PQK_x4S0WLfmA6x-wotAnzlU",
         "Accept: application/json"
     )
+
+    //Obtener historias
     @GET("/rest/v1/historia?select=*")
     fun obtenerHistorias(): Call<List<Historia>>
 

@@ -40,6 +40,7 @@ import retrofit2.Response
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
 fun LoginScreen(navController: NavHostController, viewModel: MainViewModel) {
     val context = LocalContext.current
     var username by remember { mutableStateOf("") }
@@ -98,6 +99,7 @@ fun LoginScreen(navController: NavHostController, viewModel: MainViewModel) {
                             call: Call<List<Usuario>>,
                             response: Response<List<Usuario>>
                         ) {
+                            //comprobar si la contraseña es correcta, los datos también
                             val usuarios = response.body()
                             if (usuarios != null && usuarios.isNotEmpty()) {
                                 Toast.makeText(context, "Bienvenido", Toast.LENGTH_SHORT).show()

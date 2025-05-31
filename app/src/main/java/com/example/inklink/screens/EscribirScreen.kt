@@ -70,7 +70,6 @@ fun EscribirScreen(navController: NavHostController, viewModel: MainViewModel) {
 
                 Spacer(modifier = Modifier.height(40.dp))
 
-                // Aquí el botón también pero alineado a la derecha sin flotante, para dar opción extra
                 Button(
                     onClick = {
                         val usuario = viewModel.getCurrentUser()

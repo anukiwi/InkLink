@@ -2,6 +2,8 @@ package com.example.inklink.data.model
 
 import java.io.Serializable
 
+
+//aqui defino todas mis entidades de la bdd (aunque no las utilizo todas por ahora, pero están declaradas)
 data class Usuario(
     var id: String, //UUID en Supabase
     var nombre: String,

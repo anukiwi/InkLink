@@ -1,5 +1,6 @@
 package com.example.inklink.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,6 +26,8 @@ import com.example.inklink.viewmodel.MainViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavHostController, viewModel: MainViewModel) {
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -64,19 +68,27 @@ fun HomeScreen(navController: NavHostController, viewModel: MainViewModel) {
             )
 
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { navController.navigate("escribir") },
-                containerColor = Color(0xFF65626B),
-                contentColor = Color.White  // Aquí defines el color del icono
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Escribir Historia"
-                    // No necesitas tint aquí
-                )
-            }
+        //BOTON FLOTANTE, si el usuario está logueado, te lleva a la pantalla de escribir
+        //si no, te muestra el toast para que incies sesión
+            floatingActionButton = {
+        FloatingActionButton(
+            onClick = {
+                if (viewModel.isLoggedIn) {
+                    navController.navigate("escribir")
+                } else {
+                    Toast.makeText(context, "Inicia sesión para escribir", Toast.LENGTH_SHORT).show()
+                }
+            },
+            containerColor = Color(0xFF65626B),
+            contentColor = Color.White
+        ) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "Escribir Historia"
+            )
         }
+    }
+
 
 
     ) { padding ->
@@ -178,6 +190,7 @@ fun FilterButton(text: String) {
     }
 }
 
+//historias populares solo está el diseño.
 @Composable
 fun PopularCard(titulo: String, capitulos: String) {
     Card(
@@ -198,6 +211,7 @@ fun PopularCard(titulo: String, capitulos: String) {
     }
 }
 
+//historias recomendadas solo está el diseño
 @Composable
 fun RecommendedCard(
     autor: String,
@@ -253,6 +267,8 @@ fun RecommendedCard(
         }
     }
 }
+
+//historias nuevas, solo está el diseño.
 
 @Composable
 fun NewStoryCard(

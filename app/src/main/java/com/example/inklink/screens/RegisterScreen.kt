@@ -111,6 +111,8 @@ fun RegisterScreen(navController: NavHostController) {
                     password = password
                 )
 
+                //mandar toast dependiendo del error
+
                 RetrofitClient.instance.registrarUsuario(nuevoUsuario)
                     .enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {

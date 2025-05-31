@@ -26,6 +26,8 @@ import com.example.inklink.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
+//esta pantalla solo se muestra si el usuario ESTÁ loggeado.
 fun UserScreen(navController: NavHostController, viewModel: MainViewModel) {
     Scaffold(
         topBar = {
@@ -63,12 +65,11 @@ fun UserScreen(navController: NavHostController, viewModel: MainViewModel) {
             FloatingActionButton(
                 onClick = { navController.navigate("escribir") },
                 containerColor = Color(0xFF65626B),
-                contentColor = Color.White  // Aquí defines el color del icono
+                contentColor = Color.White
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
                     contentDescription = "Escribir Historia"
-                    // No necesitas tint aquí
                 )
             }
         },
@@ -99,6 +100,7 @@ fun UserScreen(navController: NavHostController, viewModel: MainViewModel) {
                         .padding(8.dp),
                     tint = Color.White
                 )
+                //mostrar los datos del usuario actual en su perfil
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     "${user?.nombre ?: ""} ${user?.apellidos ?: ""}",
@@ -115,6 +117,11 @@ fun UserScreen(navController: NavHostController, viewModel: MainViewModel) {
                 Divider(color = Color.White.copy(alpha = 0.5f), thickness = 1.dp)
                 Spacer(modifier = Modifier.height(8.dp))
 
+                //funcion para añadir una descripción
+                //1. al registrarse el usuario no tiene descripcion hasta que la añade,
+                //el primer mensaje que se muestra es para añadir la descripción
+                //2. una vez guardas la descripción se añade a la bdd y te permite cambiarla
+                //las veces que quieras
                 if (isEditingDescripcion.value) {
                     Column(
                         modifier = Modifier
@@ -226,6 +233,7 @@ fun UserScreen(navController: NavHostController, viewModel: MainViewModel) {
     }
 }
 
+//aquí hice las estadísticas de los usuarios pero no las uso ya que ocupan mucho espacio
 @Composable
 fun ProfileStat(count: String, label: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
